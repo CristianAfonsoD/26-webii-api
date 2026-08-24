@@ -1,0 +1,32 @@
+info:
+  name: Criar matéria
+  type: http
+  seq: 7
+  tags:
+    - atividade-04
+
+http:
+  method: POST
+  url: "{{baseUrl}}/subjects"
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Matéria de teste",
+        "professorId": {{userId}}
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Cria uma matéria", function() {
+          expect(res.status).to.equal(201);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.data).to.have.property("id");
+          expect(res.body.data).to.have.property("professor");
+          bru.setEnvVar("subjectId", String(res.body.data.id));
+        });
+
+settings:
+  encodeUrl: true

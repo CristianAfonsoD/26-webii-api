@@ -1,0 +1,36 @@
+info:
+  name: Criar questão
+  type: http
+  seq: 11
+  tags:
+    - atividade-04
+
+http:
+  method: POST
+  url: "{{baseUrl}}/questions"
+  body:
+    type: json
+    data: |-
+      {
+        "enunciado": "Quanto é 2 + 2?",
+        "dificuldade": 1,
+        "respostaCorreta": "4",
+        "subjectId": {{subjectId}},
+        "authorId": {{userId}}
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Cria uma questão", function() {
+          expect(res.status).to.equal(201);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.data).to.have.property("id");
+          expect(res.body.data).to.have.property("subject");
+          expect(res.body.data).to.have.property("author");
+          bru.setEnvVar("questionId", String(res.body.data.id));
+        });
+
+settings:
+  encodeUrl: true

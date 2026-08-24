@@ -1,0 +1,34 @@
+info:
+  name: Criar usuário
+  type: http
+  seq: 3
+  tags:
+    - aula-04
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users"
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Usuário de teste",
+        "email": "usuario-{{$random.uuid}}@exemplo.com",
+        "papel": "PROFESSOR"
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Cria um usuário", function() {
+          expect(res.status).to.equal(201);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.data).to.have.property("id");
+          expect(res.body.data).to.have.property("email");
+          bru.setEnvVar("userId", String(res.body.data.id));
+          bru.setEnvVar("userEmail", res.body.data.email);
+        });
+
+settings:
+  encodeUrl: true
