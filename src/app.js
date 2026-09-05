@@ -2,10 +2,15 @@
 import express from "express";
 import prisma from "./config/database.js";
 import userRoutes from "./routes/userRoutes.js";
+import subjectRoutes from "./routes/subjectRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js";
 
 const app = express();
 
 app.use(express.json());
+
+app.use("/subjects", subjectRoutes);
+app.use("/questions", questionRoutes);
 
 app.get("/health", async (req, res) => {
   try {
